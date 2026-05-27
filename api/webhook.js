@@ -34,6 +34,22 @@
 import { FLAGS } from '../src/core/flags.js'
 import { PRODUCTS } from '../src/fixtures/products.js'
 
+// ─── Product catalogue boundary note ──────────────────────────────────────────
+// The browser-side state engine (src/core/state.js) stores the mutable product
+// catalogue in localStorage and is browser-only. This serverless function runs
+// in Node.js with no DOM, no localStorage, and no Vite module resolution.
+//
+// Simulation mode:  product lookup uses the static PRODUCTS fixture above.
+//                   Owner-added products (via UI) are NOT reflected here.
+//                   This is an expected simulation boundary — sim mode only logs.
+//
+// Live mode (FLAGS.ordersSimulated = false):
+//                   Both this webhook and the dashboard read from Supabase,
+//                   which is the single source of truth for the live catalogue.
+//                   All dynamically added products will be present in Supabase
+//                   and will be found by the lookup at processOrderFromReply().
+// ──────────────────────────────────────────────────────────────────────────────
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 /**

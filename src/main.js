@@ -23,6 +23,7 @@ import { bus } from '@/core/bus.js'
 import { getCurrentView } from '@/core/router.js'
 import '@/core/router.js'
 import { subscribeToOrders, subscribeToStock } from '@/core/supabase.js'
+import '@/core/state.js'   // initialise product state engine on page load (seeds localStorage if empty)
 
 // UI components
 import * as Navigation from '@/components/Navigation.js'
@@ -140,6 +141,17 @@ function _bootstrap() {
   // ── Toast on order status update ──────────────────────────────────────────────
   bus.on('order:status:update', ({ id, status }) => {
     showToast(`Order updated → ${status}`, 'success')
+  })
+
+  // ── Inventory view refresh on product catalogue mutation ───────────────────
+  // 'add'    → full view re-render so the new product row appears at the top
+  //            and the header count updates cleanly.
+  // 'toggle' → ignored here; InventorySwitchboard handles the in-place DOM swap
+  //            already (avoids a visible re-render flash on every stock toggle).
+  bus.on('products:mutated', ({ action }) => {
+    if (action === 'add' && getCurrentView() === 'inventory') {
+      _renderView('inventory')
+    }
   })
 
   if (import.meta.env.DEV) {

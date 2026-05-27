@@ -31,6 +31,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { FLAGS } from '@/core/flags.js'
 import { bus } from '@/core/bus.js'
+import { getProducts } from '@/core/state.js'
 
 // ─── Client factory ───────────────────────────────────────────────────────────
 
@@ -92,29 +93,33 @@ export function subscribeToOrders() {
 
     let _simCounter = 100
     const _SIM_NAMES = ['Zanele Mokoena', 'Bongani Zulu', 'Lerato Sithole', 'Dineo Mahlangu']
-    const _SIM_SUMMARIES = [
-      '1x 1L Garlic Extra Hot',
-      '2x 500ml Mango Mild',
-      '1x 2L Mixed Spice Original',
-      '3x 1L Lemon Chilli',
-    ]
 
     setInterval(() => {
       _simCounter++
-      const nameIdx = _simCounter % _SIM_NAMES.length
-      const summaryIdx = _simCounter % _SIM_SUMMARIES.length
 
-      const mockOrder = {
-        id: `sim-${_simCounter}-${Date.now()}`,
-        created_at: new Date().toISOString(),
-        phone_number: `+2782${String(_simCounter).padStart(7, '0')}`,
-        customer_name: _SIM_NAMES[nameIdx],
-        order_summary: _SIM_SUMMARIES[summaryIdx],
-        total_amount: 65 + (_simCounter % 5) * 25,
-        status: 'Pending',
+      // Pull the live state catalogue so any owner-added products appear in
+      // mock orders immediately — demonstrates the full dynamic data pipeline.
+      const inStockProducts = getProducts().filter((p) => p.in_stock)
+      if (inStockProducts.length === 0) {
+        bus.emit('dev:log', '[SIM] No in-stock products — mock order injection skipped')
+        return
       }
 
-      bus.emit('dev:log', `[SIM] Injecting mock order onto bus: ${mockOrder.id}`)
+      const product  = inStockProducts[_simCounter % inStockProducts.length]
+      const qty      = (_simCounter % 3) + 1
+      const customer = _SIM_NAMES[_simCounter % _SIM_NAMES.length]
+
+      const mockOrder = {
+        id:             `sim-${_simCounter}-${Date.now()}`,
+        created_at:     new Date().toISOString(),
+        phone_number:   `+2782${String(_simCounter).padStart(7, '0')}`,
+        customer_name:  customer,
+        order_summary:  `${qty}x ${product.size} ${product.name}`,
+        total_amount:   product.price * qty,
+        status:         'Pending',
+      }
+
+      bus.emit('dev:log', `[SIM] Injecting mock order: ${mockOrder.order_summary} from ${customer}`)
       bus.emit('order:new', mockOrder)
     }, 20000)
 
