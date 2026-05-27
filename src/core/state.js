@@ -13,11 +13,19 @@
  *         api/webhook.js (Node.js serverless — no localStorage, no Vite aliases).
  *
  * ─── Bus contract ─────────────────────────────────────────────────────────────
- * Emits: products:mutated  { action: 'add'|'toggle', product: ProductRow }
+ * Emits: products:mutated  { action: 'add'|'edit'|'toggle', product?, id? }
  *
  *   action 'add'    → consumed by main.js to re-render the inventory view
+ *   action 'edit'   → consumed by main.js to re-render (covers updateProduct +
+ *                     archiveProduct — archived rows are filtered from the view)
  *   action 'toggle' → consumed by InventorySwitchboard for in-place DOM swap
  *                     (main.js deliberately ignores toggle to avoid view flash)
+ *
+ * ─── Archive / delete safety ──────────────────────────────────────────────────
+ * Per ARCHAAR_BUILD_MANIFEST.md: no DELETE operations on the products table.
+ * archiveProduct() sets is_archived: true + in_stock: false via updateProduct().
+ * Archived rows are excluded from getProducts() but remain in _products (and
+ * localStorage / Supabase) to protect historical order integrity.
  *
  * ─── Live mode boundary ───────────────────────────────────────────────────────
  * When FLAGS.stockSimulated = false, state.js continues to maintain the local
@@ -80,7 +88,9 @@ let _products = _load() ?? _seed()
  * @returns {Array<ProductRow>}
  */
 export function getProducts() {
-  return [..._products]
+  // Exclude archived rows — is_archived may be undefined on legacy fixture rows,
+  // so use !== true rather than === false to handle both cases gracefully.
+  return _products.filter((p) => p.is_archived !== true)
 }
 
 /**
@@ -105,6 +115,7 @@ export function addProduct({ name, size, price, image_url = null }) {
     price: Number(price),
     image_url: image_url ?? null,
     in_stock: true,
+    is_archived: false,
   }
 
   // Prepend — newest product appears at top of Inventory Switchboard
@@ -155,4 +166,57 @@ export function toggleStock(id) {
   //   supabase.js subscribeToStock() subscription will then sync all other clients.
 
   return updated
+}
+
+/**
+ * updateProduct(id, updates)
+ *
+ * Merges a partial update object into the target product row, persists to
+ * localStorage, and broadcasts products:mutated { action: 'edit', id } on the bus.
+ *
+ * Used for both manual edits (name/size/price/image changes) and internal
+ * operations like archiveProduct(). Callers must pass a non-empty updates object.
+ *
+ * @param {string} id         Product UUID
+ * @param {Partial<ProductRow>} updates  Fields to merge into the existing row
+ * @returns {ProductRow|null}  The updated row, or null if the ID was not found
+ */
+export function updateProduct(id, updates) {
+  let updated = null
+
+  _products = _products.map((p) => {
+    if (p.id !== id) return p
+    updated = { ...p, ...updates }
+    return updated
+  })
+
+  if (!updated) {
+    bus.emit('dev:log', `[AOE] updateProduct: product ID "${id}" not found in state — no-op`)
+    return null
+  }
+
+  _save(_products)
+  bus.emit('products:mutated', { action: 'edit', id, product: updated })
+  bus.emit('dev:log', `[AOE] Product updated: "${updated.name} ${updated.size}" (id: ${id})`)
+
+  // Live mode stub (FLAGS.adminSimulated = false):
+  //   supabase.from('products').update(updates).eq('id', id)
+
+  return updated
+}
+
+/**
+ * archiveProduct(id)
+ *
+ * Soft-deletes a product by setting is_archived: true and in_stock: false.
+ * The row is retained in storage for historical order integrity — per
+ * ARCHAAR_BUILD_MANIFEST.md: no DELETE operations permitted on the products table.
+ *
+ * getProducts() automatically excludes archived rows from all views.
+ *
+ * @param {string} id  Product UUID
+ * @returns {ProductRow|null}  The archived row, or null if the ID was not found
+ */
+export function archiveProduct(id) {
+  return updateProduct(id, { is_archived: true, in_stock: false })
 }

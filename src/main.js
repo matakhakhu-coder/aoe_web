@@ -149,7 +149,7 @@ function _bootstrap() {
   // 'toggle' → ignored here; InventorySwitchboard handles the in-place DOM swap
   //            already (avoids a visible re-render flash on every stock toggle).
   bus.on('products:mutated', ({ action }) => {
-    if (action === 'add' && getCurrentView() === 'inventory') {
+    if ((action === 'add' || action === 'edit') && getCurrentView() === 'inventory') {
       _renderView('inventory')
     }
   })
