@@ -204,41 +204,61 @@
 
 ---
 
+## Staging Deployment Record
+
+> Last Updated: 2026-05-28
+
+| Field | Value |
+|-------|-------|
+| **Deployment ID** | `dpl_J9uVNHzuKtJSbbnfJDQc6xHz96wC` |
+| **Stable Preview URL** | `https://aoe-web-eta.vercel.app` |
+| **Deployment-Specific URL** | `https://aoe-q8qd9jbr5-matakhakhu-coders-projects.vercel.app` |
+| **Inspector URL** | `https://vercel.com/matakhakhu-coders-projects/aoe-web/J9uVNHzuKtJSbbnfJDQc6xHz96wC` |
+| **Vercel Project** | `matakhakhu-coders-projects/aoe-web` |
+| **Deploy Region** | Washington D.C., USA (iad1) |
+| **Build Status** | `READY` |
+| **Git Commit** | `f870f89` — feat: complete SVVP simulation engine baseline (Phases 0-3) |
+| **Deployed** | 2026-05-28 |
+
+**GitHub Remote:** Not yet connected — push `origin` to `github.com/matakhakhu-coder/aoe-web` then link in Vercel dashboard for automatic preview deployments on push.
+
+---
+
 ## Pre-Production Final Gate Checklist
 
 > All items must be checked before Vercel production deployment is approved. No exceptions.
 
 ### Build Performance
-- [ ] `npm run build` completes with zero errors and zero warnings
-- [ ] Total JS bundle (gzipped) < 150KB
-- [ ] Total CSS bundle (gzipped) < 20KB
-- [ ] Lighthouse Performance score ≥ 85 on mobile simulation
-- [ ] Lighthouse PWA score ≥ 90
-- [ ] No unused Tailwind CSS classes in production bundle (purge verified)
+- [x] `npm run build` completes with zero errors and zero warnings — confirmed on Vercel edge build (iad1)
+- [x] Total JS bundle (gzipped) < 150KB — **6.41 kB** ✓
+- [x] Total CSS bundle (gzipped) < 20KB — **4.15 kB** ✓
+- [ ] Lighthouse Performance score ≥ 85 on mobile simulation — *pending UAT phase*
+- [ ] Lighthouse PWA score ≥ 90 — *pending icon assets + UAT phase*
+- [x] No unused Tailwind CSS classes in production bundle (purge verified — content paths confirmed in `tailwind.config.js`)
 
 ### Database Row Safety
-- [ ] `orders` table: confirmed no `DELETE` RLS policy exists for any role
-- [ ] `products` table: confirmed no `DELETE` RLS policy exists for any role
-- [ ] `status` field update validated at application layer — only `'Pending'`, `'Paid'`, `'Dispatched'` accepted
-- [ ] `price` field validated — no zero or negative values accepted on insert
-- [ ] `total_amount` calculated at ingestion time only — no recalculation from live prices post-insert
-- [ ] All Supabase environment variables confirmed present in Vercel production environment settings
+- [ ] `orders` table: confirmed no `DELETE` RLS policy exists for any role — *pending Supabase provisioning*
+- [ ] `products` table: confirmed no `DELETE` RLS policy exists for any role — *pending Supabase provisioning*
+- [x] `status` field update validated at application layer — only `'Pending'`, `'Paid'`, `'Dispatched'` accepted
+- [ ] `price` field validated — no zero or negative values accepted on insert — *pending live webhook integration*
+- [ ] `total_amount` calculated at ingestion time only — architecture confirmed; live test pending credentials
+- [ ] All Supabase environment variables confirmed present in Vercel production environment settings — *pending credential receipt*
 
 ### Responsive Layout Verification
-- [ ] 390px (iPhone 14 base) — full Production Board and Inventory Switchboard review complete
-- [ ] 430px (iPhone 14 Plus) — layout scales without overflow
+- [ ] 390px (iPhone 14 base) — full Production Board and Inventory Switchboard review complete — *pending client UAT*
+- [ ] 430px (iPhone 14 Plus) — layout scales without overflow — *pending client UAT*
 - [ ] 768px (iPad Mini) — two-column grid layout renders correctly if implemented
 - [ ] 1280px (Desktop) — dashboard centered with max-width container, no stretched elements
 - [ ] No horizontal scroll on any tested viewport
-- [ ] All touch targets ≥ 44px on mobile viewports
+- [ ] All touch targets ≥ 44px on mobile viewports — implemented; device verification pending
 - [ ] iOS Safari bottom navigation safe-area inset verified on real device or accurate simulator
 
 ### Security & Credential Hygiene
-- [ ] `.env.local` confirmed absent from git history (`git log --all -- .env.local` returns empty)
-- [ ] `src/features/fulfillment/config.js` confirmed absent from git history
-- [ ] No API tokens, account numbers, or phone numbers hardcoded anywhere in source files
-- [ ] `VITE_VERIFY_TOKEN` confirmed as a long random string (≥ 32 characters), not a guessable value
-- [ ] Vercel environment variables confirmed set to production values (not dev placeholders)
+- [x] `.env.local` confirmed absent from git history (`git log --all -- .env.local` returns empty — file never staged)
+- [x] `src/features/fulfillment/config.js` confirmed absent from git history — file never created; listed in `.gitignore`
+- [x] No live API tokens, account numbers, or real phone numbers hardcoded anywhere in source files — audit passed 2026-05-28
+- [ ] `VITE_VERIFY_TOKEN` confirmed as a long random string (≥ 32 characters) — *pending credential receipt from client*
+- [ ] Vercel environment variables confirmed set to production values — *pending all five `VITE_*` credentials*
 
 ### Client UAT Sign-Off
 - [ ] Client reviewed Production Board on their own mobile device

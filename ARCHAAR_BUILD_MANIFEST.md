@@ -18,7 +18,7 @@
 | **Phase 5** | Simulation-to-Live Flag Transitions | Sequential flag flips (`ordersSimulated`, `stockSimulated`, `menuSimulated`, `adminSimulated`), end-to-end integration testing per flag | `[ ] Pending` |
 | **Phase 6** | PWA Configuration | `manifest.json`, service worker registration, offline fallback shell, icon set (192px + 512px), `meta` viewport and theme-color tags | `[x] Complete` |
 | **Phase 7** | Mobile Viewport Hardening | 390px base layout verification, touch target sizing (min 44px), overscroll behaviour locks, iOS Safari safe-area inset handling | `[x] Complete` |
-| **Phase 8** | Staging Lock | Vercel preview deployment, full simulation-mode smoke test, Lighthouse PWA + Performance audit, client UAT sign-off | `[ ] Pending` |
+| **Phase 8** | Staging Lock | Vercel preview deployment, full simulation-mode smoke test, Lighthouse PWA + Performance audit, client UAT sign-off | `[~] In Progress` |
 
 ---
 
