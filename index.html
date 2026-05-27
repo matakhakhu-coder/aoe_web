@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" class="dark bg-zinc-950">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Responsive viewport — mobile-first, 390px base -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- PWA & theme metadata -->
+    <meta name="theme-color" content="#10b981" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AOE Dashboard" />
+
+    <!-- SEO baseline — will be extended by SEO module in Phase 4+ -->
+    <meta name="description" content="Atchar Automation Order Engine — Real-time order management and inventory control." />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Favicon placeholders — replace with client assets -->
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+
+    <title>AOE — Order Engine</title>
+  </head>
+
+  <body class="bg-zinc-950 text-zinc-100 min-h-screen">
+
+    <!-- Application mount point -->
+    <div id="app" class="min-h-screen"></div>
+
+    <!-- Entry module -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

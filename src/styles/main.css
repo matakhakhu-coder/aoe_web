@@ -1,0 +1,78 @@
+/* src/styles/main.css
+   Tailwind CSS entry point — AOE_WEB
+   All visual styling routes through Tailwind utility classes only.
+   No inline style="" attributes permitted anywhere in the application.
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base layer resets for AOE dark-mode shell */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Prevent pull-to-refresh disrupting the dashboard on mobile */
+    overscroll-behavior: none;
+    /* Smooth scrolling for anchor navigation */
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-zinc-950 text-zinc-100 font-sans antialiased;
+    /* iOS Safari safe-area inset support */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Honour reduced motion preferences — disable all transitions */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─── New-order card entrance animation ──────────────────────────────────── */
+@keyframes aoe-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer components {
+  .card-enter {
+    animation: aoe-card-in 300ms ease-out forwards;
+  }
+}
+
+/* ─── iOS/Android safe-area utility classes ──────────────────────────────── */
+/* env() is a runtime CSS function — cannot be expressed as a Tailwind utility.
+   These classes replace all inline style="" safe-area usages in the codebase. */
+@layer utilities {
+  /* Bottom padding equal to the device safe-area inset — used on the nav bar */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Scroll container bottom padding: nav height (4.5rem) + device safe-area inset.
+     Applied to #scroll-root so content is never hidden behind the fixed nav. */
+  .scroll-pad-nav {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Toast container bottom offset: above the nav + safe-area gap + breathing room.
+     Applied to #toast-container via the `bottom` property class equivalent. */
+  .toast-offset {
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px) + 0.5rem);
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "aoe-web",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Atchar Automation Order Engine — Conversational Order Ingestion Pipeline + Instant Stock Shield",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.0.14"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.2"
+  }
+}

@@ -1,0 +1,22 @@
+# .gitattributes — AOE_WEB
+# Normalise all text files to LF in the repository; checkout as LF on all platforms.
+# Prevents CRLF diff noise on Windows developer machines.
+
+* text=auto eol=lf
+
+# Explicitly enforce LF for all source files
+*.js   text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.ts   text eol=lf
+
+# Binary assets — do not touch line endings
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.svg  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
