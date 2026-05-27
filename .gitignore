@@ -23,3 +23,7 @@ Thumbs.db
 
 # Fulfillment config — contains banking credentials
 src/features/fulfillment/config.js
+
+
+# Vercel local project link — machine-specific, not shared across developers
+.vercel/
