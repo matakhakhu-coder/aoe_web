@@ -1,0 +1,20 @@
+<svg viewBox="0 0 512 512" width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Layer 1: Native Mobile Launcher App Squircle Canvas Base -->
+  <rect width="512" height="512" rx="115" fill="#00a884"/>
+
+  <!-- Layer 2: High-Contrast Pure White WhatsApp Messaging Bubble -->
+  <path d="M256,110 C184.2,110 126,163.6 126,229.6 C126,253.2 133.4,275.2 146.2,293.6 L130,358 L197.4,342 C214.8,352.4 234.8,358.4 256,358.4 C327.8,358.4 386,304.8 386,238.8 C386,172.8 327.8,110 256,110 Z" fill="#ffffff"/>
+
+  <!-- Layer 3: Minimalist Industrial Atchar Bucket Silhouette -->
+  <!-- 3a: Overhead Wire Handle Arc Loop -->
+  <path d="M210,205 C210,148 302,148 302,205" fill="none" stroke="#00a884" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 3b: Main Tapered Heavy-Duty Plastic Bucket Base -->
+  <path d="M206,208 L220,283 C222,291 229,296 237,296 L275,296 C283,296 290,291 292,283 L306,208 Z" fill="#00a884"/>
+
+  <!-- 3c: High-Volume Pressure Snap-Seal Lid Rim Flange -->
+  <rect x="200" y="194" width="112" height="14" rx="4" fill="#00a884"/>
+
+  <!-- 3d: High-Fidelity Product Horizon Accent -->
+  <line x1="223" y1="242" x2="289" y2="242" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+</svg>
