@@ -48,11 +48,11 @@ if (import.meta.env.DEV) {
 function _simBanner() {
   if (!import.meta.env.DEV && !FLAGS.adminSimulated) return ''
   return `
-    <div id="sim-banner" class="flex items-center justify-center gap-2 bg-amber-400/8 border-b border-amber-400/15 px-4 py-2 flex-shrink-0">
-      <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span>
-      <p class="text-[10px] sm:text-[11px] font-mono font-medium text-amber-400/90 tracking-widest uppercase text-center">
-        System operating in simulation mode &nbsp;—&nbsp; all flags active
-      </p>
+    <div
+      id="sim-banner"
+      class="mx-4 my-2 flex-shrink-0 bg-[#182229] border border-[#2b3943] text-[#ffd279] rounded-lg p-2 text-xs text-center leading-snug"
+    >
+      ℹ️ System running in standalone simulation mode. All incoming customer text actions are automated.
     </div>`
 }
 
@@ -89,7 +89,7 @@ function _bootstrap() {
 
   // ── Single-pass shell mount ──────────────────────────────────────────────────
   app.innerHTML = `
-    <div class="flex flex-col h-screen overflow-hidden bg-zinc-950">
+    <div class="flex flex-col h-screen overflow-hidden bg-[#0b141a]">
 
       ${_simBanner()}
 
